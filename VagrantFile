@@ -1,0 +1,151 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.disksize.size = '30GB'
+  config.vm.define "controller" do |controller|
+    controller.vm.box = "centos/8"
+
+  # config.vm.box_check_update = false
+
+  # config.vm.network "forwarded_port", guest: 80, host: 8080
+
+  # config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
+
+    controller.vm.network "private_network", ip: "192.168.33.10"
+    controller.vm.hostname = "ansible-controller"
+  # config.vm.network "public_network"
+
+  # config.vm.synced_folder "../data", "/vagrant_data"
+
+    controller.vm.provider "virtualbox" do |vb|
+  #   # Display the VirtualBox GUI when booting the machine
+      vb.gui = false
+      vb.memory = "2048"
+      vb.cpus  = "1"
+      vb.name = "ansible-controller"
+    end
+  end
+  # documentation for more information about their specific syntax and use.
+  # config.vm.provision "shell", inline: <<-SHELL
+  #   apt-get update
+  #   apt-get install -y apache2
+  # SHELL
+  config.vm.define "client1" do |client1|
+    client1.vm.box = "centos/7"
+
+  # config.vm.box_check_update = false
+
+  # config.vm.network "forwarded_port", guest: 80, host: 8080
+
+  # config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
+
+    client1.vm.network "private_network", ip: "192.168.33.11"
+    client1.vm.hostname = "ansible-client1"
+  # config.vm.network "public_network"
+
+  # config.vm.synced_folder "../data", "/vagrant_data"
+
+    client1.vm.provider "virtualbox" do |vb|
+  #   # Display the VirtualBox GUI when booting the machine
+      vb.gui = false
+      vb.memory = "2048"
+      vb.cpus  = "1"
+      vb.name = "ansible-client1"
+    end
+  end
+  config.vm.define "client2" do |client2|
+    client2.vm.box = "ubuntu/bionic64"
+
+  # config.vm.box_check_update = false
+
+  # config.vm.network "forwarded_port", guest: 80, host: 8080
+
+  # config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
+
+    client2.vm.network "private_network", ip: "192.168.33.12"
+    client2.vm.hostname = "ansible-client2"
+  # config.vm.network "public_network"
+
+  # config.vm.synced_folder "../data", "/vagrant_data"
+
+    client2.vm.provider "virtualbox" do |vb|
+  #   # Display the VirtualBox GUI when booting the machine
+      vb.gui = false
+      vb.memory = "2048"
+      vb.cpus  = "1"
+      vb.name = "ansible-client2"
+    end
+  end
+  config.vm.define "client3" do |client3|
+    client3.vm.box = "centos/7"
+
+  # config.vm.box_check_update = false
+
+  # config.vm.network "forwarded_port", guest: 80, host: 8080
+
+  # config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
+
+    client3.vm.network "private_network", ip: "192.168.33.13"
+    client3.vm.hostname = "ansible-client3"
+  # config.vm.network "public_network"
+
+  # config.vm.synced_folder "../data", "/vagrant_data"
+
+    client3.vm.provider "virtualbox" do |vb|
+  #   # Display the VirtualBox GUI when booting the machine
+      vb.gui = false
+      vb.memory = "2048"
+      vb.cpus  = "1"
+      vb.name = "ansible-client3"
+    end
+  end
+
+  config.vm.define "client4" do |client4|
+    client4.vm.box = "centos/7"
+
+  # config.vm.box_check_update = false
+
+  # config.vm.network "forwarded_port", guest: 80, host: 8080
+
+  # config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
+
+    client4.vm.network "private_network", ip: "192.168.33.14"
+    client4.vm.hostname = "ansible-client4"
+  # config.vm.network "public_network"
+
+  # config.vm.synced_folder "../data", "/vagrant_data"
+
+    client4.vm.provider "virtualbox" do |vb|
+  #   # Display the VirtualBox GUI when booting the machine
+      vb.gui = false
+      vb.memory = "2048"
+      vb.cpus  = "1"
+      vb.name = "ansible-client4"
+    end
+  end
+
+  config.vm.define "client5" do |client5|
+    client5.vm.box = "centos/8"
+
+  # config.vm.box_check_update = false
+
+  # config.vm.network "forwarded_port", guest: 80, host: 8080
+
+  # config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
+
+    client5.vm.network "private_network", ip: "192.168.33.15"
+    client5.vm.hostname = "ansible-client5"
+  # config.vm.network "public_network" 
+
+  # config.vm.synced_folder "../data", "/vagrant_data"
+
+    client5.vm.provider "virtualbox" do |vb|
+  #   # Display the VirtualBox GUI when booting the machine
+      vb.gui = false
+      vb.memory = "2048"
+      vb.cpus  = "1"
+      vb.name = "ansible-client5"
+    end
+  end
+end
