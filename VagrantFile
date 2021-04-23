@@ -13,7 +13,7 @@ Vagrant.configure("2") do |config|
   # config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
 
     controller.vm.network "private_network", ip: "192.168.33.10"
-    controller.vm.hostname = "ansible-controller"
+    controller.vm.hostname = "controller"
   # config.vm.network "public_network"
 
   # config.vm.synced_folder "../data", "/vagrant_data"
@@ -23,7 +23,7 @@ Vagrant.configure("2") do |config|
       vb.gui = false
       vb.memory = "2048"
       vb.cpus  = "1"
-      vb.name = "ansible-controller"
+      vb.name = "controller"
     end
   end
   # documentation for more information about their specific syntax and use.
@@ -41,7 +41,7 @@ Vagrant.configure("2") do |config|
   # config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
 
     client1.vm.network "private_network", ip: "192.168.33.11"
-    client1.vm.hostname = "ansible-client1"
+    client1.vm.hostname = "client1"
   # config.vm.network "public_network"
 
   # config.vm.synced_folder "../data", "/vagrant_data"
@@ -51,7 +51,7 @@ Vagrant.configure("2") do |config|
       vb.gui = false
       vb.memory = "2048"
       vb.cpus  = "1"
-      vb.name = "ansible-client1"
+      vb.name = "client1"
     end
   end
   config.vm.define "client2" do |client2|
@@ -64,7 +64,7 @@ Vagrant.configure("2") do |config|
   # config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
 
     client2.vm.network "private_network", ip: "192.168.33.12"
-    client2.vm.hostname = "ansible-client2"
+    client2.vm.hostname = "client2"
   # config.vm.network "public_network"
 
   # config.vm.synced_folder "../data", "/vagrant_data"
@@ -74,7 +74,7 @@ Vagrant.configure("2") do |config|
       vb.gui = false
       vb.memory = "2048"
       vb.cpus  = "1"
-      vb.name = "ansible-client2"
+      vb.name = "client3"
     end
   end
   config.vm.define "client3" do |client3|
@@ -87,7 +87,7 @@ Vagrant.configure("2") do |config|
   # config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
 
     client3.vm.network "private_network", ip: "192.168.33.13"
-    client3.vm.hostname = "ansible-client3"
+    client3.vm.hostname = "client4"
   # config.vm.network "public_network"
 
   # config.vm.synced_folder "../data", "/vagrant_data"
@@ -97,7 +97,7 @@ Vagrant.configure("2") do |config|
       vb.gui = false
       vb.memory = "2048"
       vb.cpus  = "1"
-      vb.name = "ansible-client3"
+      vb.name = "client3"
     end
   end
 
@@ -111,7 +111,7 @@ Vagrant.configure("2") do |config|
   # config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
 
     client4.vm.network "private_network", ip: "192.168.33.14"
-    client4.vm.hostname = "ansible-client4"
+    client4.vm.hostname = "client4"
   # config.vm.network "public_network"
 
   # config.vm.synced_folder "../data", "/vagrant_data"
@@ -121,7 +121,7 @@ Vagrant.configure("2") do |config|
       vb.gui = false
       vb.memory = "2048"
       vb.cpus  = "1"
-      vb.name = "ansible-client4"
+      vb.name = "client4"
     end
   end
 
@@ -135,7 +135,7 @@ Vagrant.configure("2") do |config|
   # config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
 
     client5.vm.network "private_network", ip: "192.168.33.15"
-    client5.vm.hostname = "ansible-client5"
+    client5.vm.hostname = "client5"
   # config.vm.network "public_network" 
 
   # config.vm.synced_folder "../data", "/vagrant_data"
@@ -145,7 +145,7 @@ Vagrant.configure("2") do |config|
       vb.gui = false
       vb.memory = "2048"
       vb.cpus  = "1"
-      vb.name = "ansible-client5"
+      vb.name = "client5"
     end
   end
 end
