@@ -1,0 +1,83 @@
+NUM_WORKER_NODES=3
+NUM_MASTER_NODES=2
+IP_NW="192.168.33."
+MASTER_IP_START=10
+NODE_IP_START=13
+NFS_SERVER_IP=16
+LB_SERVER_IP=17
+
+Vagrant.configure("2") do |config|
+  config.disksize.size = '30GB'
+  config.ssh.username = 'vagrant'
+  config.ssh.password = 'vagrant'
+  config.ssh.insert_key = false
+  config.vm.provision "shell", env: {"IP_NW" => IP_NW, "IP_START" => MASTER_IP_START, "NODE_IP_START" => NODE_IP_START, "NFS_SERVER_IP" => NFS_SERVER+IP, "LB_SERVER_IP" => LB_SERVER_IP}, inline: <<-SHELL
+    yum update -y
+    sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config    
+    systemctl restart sshd.service
+    yum install -y yum-utils device-mapper-persistent-data lvm2
+    yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+    yum install docker -y
+    systemctl start docker
+    systemctl enable docker
+    echo "$IP_NW$((MASTER_IP_START)) master-node01 master-node01.example.com" >> /etc/hosts
+    echo "$IP_NW$((MASTER_IP_START+1)) master-node01 master-node02.example.com" >> /etc/hosts
+    echo "$IP_NW$((MASTER_IP_START+2)) master-node03 master-node01.example.com" >> /etc/hosts
+    echo "$IP_NW$((NODE_IP_START)) worker-node01 worker-node01.exaple.com" >> /etc/hosts
+    echo "$IP_NW$((NODE_IP_START+1)) worker-node02 worker-node02.example.com" >> /etc/hosts
+    echo "$IP_NW$((NODE_IP_START+2)) worker-node03 master-node01.example.com" >> /etc/hosts
+    echo "$IP_NW$((NFS_SERVER_IP)) nfs-server nfs-server.example.com" >> /etc/hosts
+    echo "$IP_NW$((LB_SERVER_IP)) lb lb.example.com" >> /etc/hosts
+    cat <<EOF > /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+EOF  
+  SHELL
+  config.vm.box = "geerlingguy/centos7
+  config.vm.box_check_update = true
+  (1..NUM_MASTER_NODES).each do |i|
+  config.vm.define "master0#{i}" do |master|
+    master.vm.hostname = "master-node0#{i}"
+    master.vm.network "private_network", ip: IP_NW + "#{IP_START}"
+    master.vm.provider "virtualbox" do |vb|
+        vb.memory = 4048
+        vb.cpus = 2
+    end
+  end
+  end
+
+  (1..NUM_WORKER_NODES).each do |i|
+
+  config.vm.define "node0#{i}" do |node|
+    node.vm.hostname = "worker-node0#{i}"
+    node.vm.network "private_network", ip: IP_NW + "#{IP_START + i}"
+    node.vm.provider "virtualbox" do |vb|
+        vb.memory = 2048
+        vb.cpus = 1
+    end
+  end
+
+  end
+  config.vm.define "nfs" do |nfs_server|
+    nfs_server.vm.hostname = "nfs-server"
+    nfs_server.vm.network "private_network", ip: IP_NW + "#{NFS_SERVER_IP}"
+    nfs-server.vm.provider "virtualbox" do |vb|
+       vb.memory = 2048
+        vb.cpus = 1
+    end
+  end
+  config.vm.define "lb" do |lb_server|
+    lb_server.vm.hostname = "lb_server"
+    lb_server.vm.network "private_network", ip: IP_NW + "#{LB_SERVER_IP}"
+    lb-server.vm.provider "virtualbox" do |vb|
+       vb.memory = 2048
+        vb.cpus = 1
+    end
+  end
+    
+end 
