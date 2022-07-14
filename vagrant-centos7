@@ -35,7 +35,7 @@ EOF
 EOF
   SHELL
   config.vm.define "master" do |kube_master|
-    kube_master.vm.box = "centos/7"
+    kube_master.vm.box = "geerlingguy/centos7"
   
   # config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
 
@@ -55,7 +55,7 @@ EOF
   #   apt-get install -y apache2
   # SHELL
   config.vm.define "node1" do |kube_node1|
-    kube_node1.vm.box = "centos/7"
+    kube_node1.vm.box = "geerlingguy/centos7"
 
     kube_node1.vm.network "private_network", ip: "192.168.33.11"
     kube_node1.vm.hostname = "kube-node1"
@@ -69,7 +69,7 @@ EOF
     end
   end
   config.vm.define "node2" do |kube_node2|
-    kube_node2.vm.box = "centos/7"
+    kube_node2.vm.box = "geerlingguy/centos7"
 
     kube_node2.vm.network "private_network", ip: "192.168.33.12"
     kube_node2.vm.hostname = "kube-node2"
@@ -83,7 +83,7 @@ EOF
     end
   end
   config.vm.define "node3" do |kube_node3|
-    kube_node3.vm.box = "centos/7"
+    kube_node3.vm.box = "geerlingguy/centos7"
 
     kube_node3.vm.network "private_network", ip: "192.168.33.13"
     kube_node3.vm.hostname = "kube-node3"
@@ -98,7 +98,7 @@ EOF
   end
 
   config.vm.define "nfs" do |nfs_server|
-    nfs_server.vm.box = "centos/7"
+    nfs_server.vm.box = "geerlingguy/centos7"
 
 
     nfs_server.vm.network "private_network", ip: "192.168.33.14"
