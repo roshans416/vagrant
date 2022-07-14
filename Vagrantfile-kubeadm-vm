@@ -22,10 +22,10 @@ Vagrant.configure("2") do |config|
     systemctl enable docker
     echo "$IP_NW$((MASTER_IP_START)) master-node01 master-node01.example.com" >> /etc/hosts
     echo "$IP_NW$((MASTER_IP_START+1)) master-node01 master-node02.example.com" >> /etc/hosts
-    echo "$IP_NW$((MASTER_IP_START+2)) master-node03 master-node01.example.com" >> /etc/hosts
+    echo "$IP_NW$((MASTER_IP_START+2)) master-node03 master-node03.example.com" >> /etc/hosts
     echo "$IP_NW$((NODE_IP_START)) worker-node01 worker-node01.exaple.com" >> /etc/hosts
     echo "$IP_NW$((NODE_IP_START+1)) worker-node02 worker-node02.example.com" >> /etc/hosts
-    echo "$IP_NW$((NODE_IP_START+2)) worker-node03 master-node01.example.com" >> /etc/hosts
+    echo "$IP_NW$((NODE_IP_START+2)) worker-node03 worker-node03.example.com" >> /etc/hosts
     echo "$IP_NW$((NFS_SERVER_IP)) nfs-server nfs-server.example.com" >> /etc/hosts
     echo "$IP_NW$((LB_SERVER_IP)) lb lb.example.com" >> /etc/hosts
     cat <<EOF > /etc/yum.repos.d/kubernetes.repo
