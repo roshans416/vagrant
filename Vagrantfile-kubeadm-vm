@@ -61,12 +61,11 @@ EOF
         vb.cpus = 2
     end
   end
-
   end
   config.vm.define "nfs" do |nfs_server|
     nfs_server.vm.hostname = "nfs-server"
     nfs_server.vm.network "private_network", ip: IP_NW + "#{NFS_SERVER_IP}"
-    nfs-server.vm.provider "virtualbox" do |vb|
+    nfs_server.vm.provider "virtualbox" do |vb|
        vb.memory = 1024
         vb.cpus = 1
     end
@@ -74,10 +73,9 @@ EOF
   config.vm.define "lb" do |lb_server|
     lb_server.vm.hostname = "lb_server"
     lb_server.vm.network "private_network", ip: IP_NW + "#{LB_SERVER_IP}"
-    lb-server.vm.provider "virtualbox" do |vb|
+    lb_server.vm.provider "virtualbox" do |vb|
        vb.memory = 1024
         vb.cpus = 1
     end
-  end
-    
+  end    
 end 
