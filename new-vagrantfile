@@ -1,0 +1,185 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.disksize.size = '30GB'
+  config.ssh.username = 'vagrant'
+  #config.ssh.password = 'vagrant'
+  #config.ssh.insert_key = false
+  config.vm.provision "shell", inline: <<-SHELL
+    yum update -y
+    yum install -y yum-utils device-mapper-persistent-data lvm2
+    #sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config    
+    #systemctl restart sshd.service
+    yum-config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
+    yum install docker -y
+    systemctl start docker
+    systemctl enable docker
+    cat <<EOF > /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+EOF
+    cat <<EOF > /etc/hosts
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+192.168.33.10 kube-master kube-master.example.com
+192.168.33.18 kube-master2 kube-master2.example.com
+192.168.33.19 kube-master3 kube-master3.example.com
+192.168.33.11 kube-node1  kube-node1.example.com
+192.168.33.12 kube-node2  kube-node2.example.com
+192.168.33.13 kube-node3 kube-node3.example.com
+192.168.33.14 nfs-server  nfs-server.example.com
+192.168.33.15 haproxy1 haproxy1.example.com
+192.168.33.16 haproxy2 haproxy2.example.com
+192.168.33.17 master-vip master-vip.example.com
+
+EOF
+  SHELL
+  config.vm.define "master" do |kube_master|
+    kube_master.vm.box = "centos/7"
+  
+  # config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
+
+    kube_master.vm.network "private_network", ip: "192.168.33.10"
+    kube_master.vm.hostname = "kube-master"
+    kube_master.vm.provider "virtualbox" do |vb|
+  #   # Display the VirtualBox GUI when booting the machine
+      vb.gui = false
+      vb.memory = "2048"
+      vb.cpus  = "2"
+      vb.name = "kube-master"
+    end
+  end
+
+ config.vm.define "master2" do |kube_master2|
+    kube_master2.vm.box = "centos/7"
+
+  # config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
+
+    kube_master2.vm.network "private_network", ip: "192.168.33.18"
+    kube_master2.vm.hostname = "kube-master2"
+    kube_master2.vm.provider "virtualbox" do |vb|
+  #   # Display the VirtualBox GUI when booting the machine
+      vb.gui = false
+      vb.memory = "2048"
+      vb.cpus  = "2"
+      vb.name = "kube-master2"
+    end
+  end
+
+  config.vm.define "master3" do |kube_master3|
+    kube_master3.vm.box = "centos/7"
+
+  # config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
+
+    kube_master3.vm.network "private_network", ip: "192.168.33.19"
+    kube_master3.vm.hostname = "kube-master3"
+    kube_master3.vm.provider "virtualbox" do |vb|
+  #   # Display the VirtualBox GUI when booting the machine
+      vb.gui = false
+      vb.memory = "2048"
+      vb.cpus  = "2"
+      vb.name = "kube-master3"
+    end
+  end 
+  # documentation for more information about their specific syntax and use.
+  # config.vm.provision "shell", inline: <<-SHELL
+  #   apt-get update
+  #   apt-get install -y apache2
+  # SHELL
+  config.vm.define "node1" do |kube_node1|
+    kube_node1.vm.box = "centos/7"
+
+    kube_node1.vm.network "private_network", ip: "192.168.33.11"
+    kube_node1.vm.hostname = "kube-node1"
+
+    kube_node1.vm.provider "virtualbox" do |vb|
+  #   # Display the VirtualBox GUI when booting the machine
+      vb.gui = false
+      vb.memory = "2048"
+      vb.cpus  = "2"
+      vb.name = "kube-node1"
+    end
+  end
+  config.vm.define "node2" do |kube_node2|
+    kube_node2.vm.box = "centos/7"
+
+    kube_node2.vm.network "private_network", ip: "192.168.33.12"
+    kube_node2.vm.hostname = "kube-node2"
+
+    kube_node2.vm.provider "virtualbox" do |vb|
+  #   # Display the VirtualBox GUI when booting the machine
+      vb.gui = false
+      vb.memory = "2048"
+      vb.cpus  = "2"
+      vb.name = "kube-node2"
+    end
+  end
+#  config.vm.define "node3" do |kube_node3|
+#    kube_node3.vm.box = "centos/7"
+
+#    kube_node3.vm.network "private_network", ip: "192.168.33.13"
+#    kube_node3.vm.hostname = "kube-node3"
+
+#    kube_node3.vm.provider "virtualbox" do |vb|
+  #   # Display the VirtualBox GUI when booting the machine
+#      vb.gui = false
+#      vb.memory = "2048"
+#      vb.cpus  = "2"
+#      vb.name = "kube-node3"
+#    end
+#  end
+
+  config.vm.define "nfs" do |nfs_server|
+    nfs_server.vm.box = "centos/7"
+
+
+    nfs_server.vm.network "private_network", ip: "192.168.33.14"
+    nfs_server.vm.hostname = "nfs-server"
+
+    nfs_server.vm.provider "virtualbox" do |vb|
+  #   # Display the VirtualBox GUI when booting the machine
+      vb.gui = false
+      vb.memory = "2048"
+      vb.cpus  = "1"
+      vb.name = "nfs-server"
+    end
+  end
+ 
+ config.vm.define "haproxy1" do |haproxy1|
+    haproxy1.vm.box = "centos/7"
+
+
+    haproxy1.vm.network "private_network", ip: "192.168.33.15"
+    haproxy1.vm.hostname = "haproxy1"
+
+    haproxy1.vm.provider "virtualbox" do |vb|
+  #   # Display the VirtualBox GUI when booting the machine
+      vb.gui = false
+      vb.memory = "1024"
+      vb.cpus  = "1"
+      vb.name = "haproxy1"
+    end
+  end
+
+config.vm.define "haproxy2" do |haproxy2|
+    haproxy2.vm.box = "centos/7"
+
+
+    haproxy2.vm.network "private_network", ip: "192.168.33.16"
+    haproxy2.vm.hostname = "haproxy2"
+
+    haproxy2.vm.provider "virtualbox" do |vb|
+  #   # Display the VirtualBox GUI when booting the machine
+      vb.gui = false
+      vb.memory = "1024"
+      vb.cpus  = "1"
+      vb.name = "haproxy2"
+    end
+  end
+end
